@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 import ARKit
-import DeviceKit
 
 /**
  Default Camera Data Source provide ability to fetch artwork and present some gallery over camera if needed.
@@ -187,7 +186,7 @@ public extension ARWallArtworkControl {
      @result True if device supported, otherwise False
      */
     static func isDeviceSupported() -> Bool {
-        return Device.isA12Chip()
+        return UIDevice.isA12Chip()
     }
     
     /**

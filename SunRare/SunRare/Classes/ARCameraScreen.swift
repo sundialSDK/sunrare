@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 import SceneKit
 import ARKit
-import ProgressHUD
 
 class ARCameraScreen: UIViewController {
     @IBOutlet weak var sceneView: ARSCNView!
@@ -103,12 +102,9 @@ extension ARCameraScreen {
         }
         
         //load initial map
-        ArtworkMap.load(url: url).then { [weak self] map in
+        ArtworkMap.load(url: url) { [weak self] error, map in
             defaultConfig(map)
-            self?.initialWorldMapDidLoad(succ: true, url: url)
-        }.catch { [weak self] error in
-            defaultConfig(nil)
-            self?.initialWorldMapDidLoad(succ: false, url: url)
+            self?.initialWorldMapDidLoad(succ: error == nil, url: url)
         }
     }
 }
@@ -204,12 +200,7 @@ extension ARCameraScreen {
     @IBAction func pressedSave() {
         guard let url = worldMapSaveURL else { return }
         
-        ProgressHUD.show()
-        wallArtwork.saveScene(url: url).then {
-            ProgressHUD.showSuccess()
-        }.catch { error in
-            ProgressHUD.showError(error.localizedDescription)
-        }
+        wallArtwork.saveScene(url: url)
     }
 }
 

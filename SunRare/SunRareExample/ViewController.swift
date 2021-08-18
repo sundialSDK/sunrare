@@ -10,7 +10,6 @@ import UIKit
 import SunRare
 import AVFoundation
 import ARKit
-import ProgressHUD
 
 class ViewController: UIViewController {
     @IBOutlet weak var checkCameraAccessBeforeSwitch: UISwitch!
@@ -42,7 +41,9 @@ class ViewController: UIViewController {
             try ARWallArtworkControl.presentDefaultARCameraScreen(configuration: config, datasource: self, in: self)
         }
         catch let e {
-            ProgressHUD.showError(e.localizedDescription, image: nil, interaction: false)
+            let alert = UIAlertController(title: "Error", message: e.localizedDescription, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
+            present(alert, animated: true, completion: nil)
         }
     }
 }

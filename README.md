@@ -1,15 +1,6 @@
-# sunrare
-
-[![CI Status](https://img.shields.io/travis/Alen Korbut/sunrare.svg?style=flat)](https://travis-ci.org/Alen Korbut/sunrare)
-[![Version](https://img.shields.io/cocoapods/v/sunrare.svg?style=flat)](https://cocoapods.org/pods/sunrare)
-[![License](https://img.shields.io/cocoapods/l/sunrare.svg?style=flat)](https://cocoapods.org/pods/sunrare)
-[![Platform](https://img.shields.io/cocoapods/p/sunrare.svg?style=flat)](https://cocoapods.org/pods/sunrare)
+# SunRare
 
 ARKit based wall artworks that provide ability to detect and visualize walls, place new Artwork and move it over the wall. Tap to select, reorder, go on link and change zoom for each Artwork. Save and load AR Artworks. Support easy integration by using Default AR Camera Screen or completely customizable UI by using ARWallArtworkControl directly with delegate and overlay provider usage.  
-
-## Example
-
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
 ## Requirements
 
@@ -18,6 +9,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 - `A12 chip` compatible devices
 - `Privacy - Camera Usage Description` in info.plist
 - `Privacy - Photo Library Additions Usage Description` in info.plist
+- `iOS Device Only`. Simulator not supported!
 
 ## Installation with CocoaPods
 

@@ -8,7 +8,6 @@
 
 import Foundation
 import SceneKit
-import Kingfisher
 import ARKit
 
 class ArtworkNode: SCNNode {
@@ -95,12 +94,12 @@ class ArtworkNode: SCNNode {
     
     private func loadImage(url: URL?) {
         guard let tmp = url else { return }
-        ImageDownloader.default.downloadImage(with: tmp, options: [KingfisherOptionsInfoItem.cacheOriginalImage]) { [weak self] result in
-            switch result {
-            case .success(let img):
-                self?.imageNode.geometry?.materials.first?.diffuse.contents = img.image
-            case .failure:
-                break
+        DispatchQueue.global().async {
+            guard let data = try? Data(contentsOf: tmp),
+                  let img = UIImage(data: data)
+            else { return }
+            DispatchQueue.main.async { [weak self] in
+                self?.imageNode.geometry?.materials.first?.diffuse.contents = img
             }
         }
     }

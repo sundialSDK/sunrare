@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import ProgressHUD
 
 extension UIView {
     func renderToImage(opaque: Bool) -> UIImage? {
@@ -57,7 +56,6 @@ class SnapshotScreen: UIViewController {
         guard let img = getResultImage() else { return }
 
         UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil)
-        ProgressHUD.showSuccess()
     }
     @IBAction func pressedShare() {
         guard let img = getResultImage() else { return }

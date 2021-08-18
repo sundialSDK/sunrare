@@ -8,7 +8,6 @@
 
 import Foundation
 import ARKit
-import Hydra
 
 /**
  Artwork Map provide easy way to load and save ARWorldMap from / to URL by using Promises
@@ -24,27 +23,36 @@ public extension ArtworkMap {
      @discussion -
      @param session exist session that would be used for get current world map
      @param url where to save url. Local file url
-     @result Promise with success Void result or fail with some Error
+     @param completion success with nil error result or fail with some Error
      */
-    static func save(session: ARSession, url: URL) -> Promise<Void> {
-        return Promise { [weak session] res, rej, status in
-            session?.getCurrentWorldMap { map, error in
-                if let tmp = map {
-                    do {
-                        try? FileManager.default.removeItem(at: url)
-                        try ArtworkMap.writeWorldMap(tmp, to: url)
-                        res(())
-                    }
-                    catch let e {
-                        rej(e)
+    static func save(session: ARSession, url: URL, completion: ((Error?)->())? = nil) {
+        session.getCurrentWorldMap { map, error in
+            
+            //reusable
+            let complete: (Error?)->() = { e in
+                if let tmp = completion {
+                    DispatchQueue.main.async {
+                        tmp(e)
                     }
                 }
-                else if let e = error {
-                    rej(e)
+            }
+            
+            //get map
+            if let tmp = map {
+                do {
+                    try? FileManager.default.removeItem(at: url)
+                    try ArtworkMap.writeWorldMap(tmp, to: url)
+                    complete(nil)
                 }
-                else {
-                    rej(MapError.nothingToSave)
+                catch let e {
+                    complete(e)
                 }
+            }
+            else if let e = error {
+                complete(e)
+            }
+            else {
+                complete(MapError.nothingToSave)
             }
         }
     }
@@ -54,16 +62,20 @@ public extension ArtworkMap {
      
      @discussion -
      @param url source url to load from
-     @result Promise with success ARWorldMap or fail with some error
+     @param completion success ARWorldMap or fail with some error
      */
-    static func load(url: URL) -> Promise<ARWorldMap> {
-        return Promise { res, rej, status in
+    static func load(url: URL, completion: @escaping (Error?, ARWorldMap?)->()) {
+        DispatchQueue.global().async {
             do {
                 let map = try ArtworkMap.loadWorldMap(from: url)
-                res(map)
+                DispatchQueue.main.async {
+                    completion(nil, map)
+                }
             }
             catch let e {
-                rej(e)
+                DispatchQueue.main.async {
+                    completion(e, nil)
+                }
             }
         }
     }

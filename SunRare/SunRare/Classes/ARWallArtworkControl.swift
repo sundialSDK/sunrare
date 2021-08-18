@@ -11,8 +11,6 @@ import UIKit
 import AVFoundation
 import ARKit
 import SceneKit
-import DeviceKit
-import Hydra
 
 /**
  ARWallArtworkControl is general control for support wall detection and manage artworks
@@ -306,13 +304,15 @@ public extension ARWallArtworkControl {
      
      @discussion throw MapError.sessionRequired if sceneView == nil. NOTE: active placing node wouldn't be saved - it's need to be stored first!
      @param url destination file url to save in
-     @result Promise with success Void result or fail with some error
+     @param completion success with nil error result or fail with some error
+     @result Promise with
      */
-    func saveScene(url: URL) -> Promise<Void> {
+    func saveScene(url: URL, completion: ((Error?)->())? = nil) {
         guard let session = sceneView?.session else {
-            return Promise(rejected: MapError.sessionRequired)
+            completion?(MapError.sessionRequired)
+            return
         }
-        return ArtworkMap.save(session: session, url: url)
+        ArtworkMap.save(session: session, url: url, completion: completion)
     }
 }
 

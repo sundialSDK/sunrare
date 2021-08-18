@@ -232,7 +232,6 @@
 				7154A61126CCD16F00D000A6 /* Sources */,
 				7154A61226CCD16F00D000A6 /* Frameworks */,
 				7154A61326CCD16F00D000A6 /* Resources */,
-				7154A6FA26CD5AD200D000A6 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -319,26 +318,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		7154A6FA26CD5AD200D000A6 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-			shellPath = /bin/sh;
-			shellScript = "xcodebuild archive \\\n  -scheme SunRare \\\n  -destination \"generic/platform=iOS Simulator\" \\\n  -archivePath \"archives/SunRare-Simulator\" \\\n  SKIP_INSTALL=NO \\\n  BUILD_LIBRARY_FOR_DISTRIBUTION=YES\n\nxcodebuild archive \\\n  -scheme SunRare \\\n  -destination generic/platform=iOS \\\n  -archivePath \"archives/SunRare\" \\\n  SKIP_INSTALL=NO \\\n  BUILD_LIBRARY_FOR_DISTRIBUTION=YES\n  \ncp -r /archives/SunRare-Simulator.xcarchive/Products/Library/Frameworks/. /archives/simulator\ncp -r /archives/SunRare.xcarchive/Products/Library/Frameworks/. /archives/ios\n\nxcodebuild -create-xcframework \\\n           -framework archives/ios/SunRare.framework \\\n           -framework archives/simulator/SunRare.framework \\\n           -output archives/SunRare.xcframework\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7154A61126CCD16F00D000A6 /* Sources */ = {

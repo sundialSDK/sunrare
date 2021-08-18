@@ -1,48 +1,32 @@
-# ARWallArtwork
+# sunrare
 
-[![CocoaPods](https://img.shields.io/cocoapods/v/CameraManager.svg)](https://github.com/imaginary-cloud/CameraManager) [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![CI Status](https://img.shields.io/travis/Alen Korbut/sunrare.svg?style=flat)](https://travis-ci.org/Alen Korbut/sunrare)
+[![Version](https://img.shields.io/cocoapods/v/sunrare.svg?style=flat)](https://cocoapods.org/pods/sunrare)
+[![License](https://img.shields.io/cocoapods/l/sunrare.svg?style=flat)](https://cocoapods.org/pods/sunrare)
+[![Platform](https://img.shields.io/cocoapods/p/sunrare.svg?style=flat)](https://cocoapods.org/pods/sunrare)
 
-ARKit based Wall Artworks that provide ability to detect and visualize walls, place new Artwork and move it over the wall. Tap to select, reorder, go on link and change zoom of each Artwork. Save and load AR Artworks. Support easy integration by using Default AR Camera Screen or completely customizable UI by using ARWallArtworkControl directly with delegate overlay provider usage.  
+ARKit based wall artworks that provide ability to detect and visualize walls, place new Artwork and move it over the wall. Tap to select, reorder, go on link and change zoom for each Artwork. Save and load AR Artworks. Support easy integration by using Default AR Camera Screen or completely customizable UI by using ARWallArtworkControl directly with delegate and overlay provider usage.  
+
+## Example
+
+To run the example project, clone the repo, and run `pod install` from the Example directory first.
+
+## Requirements
+
+- `iOS 13` and above. 
+- `Swift 5`. 
+- `A12 chip` compatible devices
+- `Privacy - Camera Usage Description` in info.plist
+- `Privacy - Photo Library Additions Usage Description` in info.plist
 
 ## Installation with CocoaPods
 
-The easiest way to install the CameraManager is with [CocoaPods](http://cocoapods.org)
-
-### Podfile
+sunrare is available through [CocoaPods](https://cocoapods.org). To install
+it, simply add the following line to your Podfile:
 
 ```ruby
-use_frameworks!
-
-pod 'ARWallArtwork', '~> 1.0'
+pod 'sunrare', '~> 1.0'
 ```
-
-## Installation with Swift Package Manager
-
-The [Swift Package Manager](https://swift.org/package-manager/) is a tool for managing the distribution of Swift code.
-
-Add `ARWallArtwork` as a dependency in your `Package.swift` file:
-
-```
-import PackageDescription
-
-let package = Package(
-    dependencies: [
-        .Package(url: "https://github.com/sundialai/ARWallArtwork", from: "1.0")
-    ]
-)
-```
-
-## Installation with Carthage
-
-[Carthage](https://github.com/Carthage/Carthage) is another dependency management tool written in Swift.
-
-Add the following line to your Cartfile:
-
-```
-github "sundialai/ARWallArtwork" >= 1.0
-```
-
-And run `carthage update` to build the dynamic framework.
 
 ## How to use
 
@@ -126,27 +110,58 @@ private lazy var wallArtwork: ARWallArtworkControl = {
 
 Support `ARWallArtworkControlDelegate`: 
 
-```swift
-extension ArtworksCameraScreen: ARWallArtworkControlDelegate {
-func arWallArtworkControl(_ control: ARWallArtworkControl, showCoaching: Bool) {
-    //TODO: 
-}
-func arWallArtworkControl(_ control: ARWallArtworkControl, didSelectArtwork model: ARWallArtwork.ArtworkModel, placing: Bool, zoom: Float) {
-    //TODO:
-}
+`func arWallArtworkControl(_ control: ARWallArtworkControl, showCoaching: Bool)` handle coaching show / hide states, so in general should be used to update UI for display or hide all necessary UI while coaching active / inactive.  
 
-func arWallArtworkControlDidUnselectArtwork(_ control: ARWallArtworkControl) {
-    //TODO:
+```swift
+func arWallArtworkControl(_ control: ARWallArtworkControl, showCoaching: Bool) {
+    overlayContainer.isHidden = showCoaching
 }
+```
+
+`func arWallArtworkControl(_ control: ARWallArtworkControl, didSelectArtwork model: ARWallArtwork.ArtworkModel, placing: Bool, zoom: Float)` handle artwork selection, so in general should be use for update selected artwork info. 
+
+```swift
+func arWallArtworkControl(_ control: ARWallArtworkControl, didSelectArtwork model: ArtworkModel, placing: Bool, zoom: Float) {
+    self.activeModel = model
+    titleLabel.text = model.imageName
+    placingIndicator.isHidden = !placing
+    zoomLabel.text = "\(Int(zoom * 100))%"
+}
+```
+
+`func arWallArtworkControlDidUnselectArtwork(_ control: ARWallArtworkControl)` handle unselection, so in general should be used for hide all UI that chain with selected artwork. 
+
+```swift
+func arWallArtworkControlDidUnselectArtwork(_ control: ARWallArtworkControl) {
+    activeModel = nil
+    titleLabel.text = ""
+    placingIndicator.isHidden = true
+    zoomLabel.isHidden = true
 }
 ```
 
 Support `ARWallArtworkControlOverlayProvider`: 
 
+`func arWallArtworkControl(_ control: ARWallArtworkControl, updateOverlayFor model: ArtworkModel, info: [ARWallArtwork.ArtworkSubNodeType : CGPoint])`  Update Overlay action for some specific AR artwork node subnodes. Called on Main / UI Queue each time in renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) with already converted 2D coords from 3D coords. Should be used only for update overlay items locations. `For example`: you support delegate and handle didSelect to update title of active artwork, but you should update coordinate for that title label only in overlay provider if you want to move that label with AR Artwork Node. NOTE: subnodes grabbed from `ARWallArtworkControl.configuration.overlaySubNodes`, so if you're not set some subnode there then it wouldn't appear here (see `ARWallArtworkControl.Configuration` details next).
+
+
 ```swift
-extension ArtworksCameraScreen: ARWallArtworkControlOverlayProvider {
-    func arWallArtworkControl(_ control: ARWallArtworkControl, updateOverlayFor model: ArtworkModel, info: [ARWallArtwork.ArtworkSubNodeType : CGPoint]) {
-        //TODO:
+func arWallArtworkControl(_ control: ARWallArtworkControl, updateOverlayFor model: ArtworkModel, info: [ArtworkSubNodeType : CGPoint]) {
+    //reusable
+    let setTr: (UIView, CGPoint)->() = { tmp, pt in
+        tmp.transform = CGAffineTransform.identity
+        let fix = tmp.frame
+        tmp.transform = CGAffineTransform(translationX: pt.x - fix.midX, y: pt.y - fix.midY)
+    }
+    
+    //set zoom loc
+    if let tmp = info[.zoom] {
+        setTr(zoomLabel, tmp)
+    }
+    
+    //set title loc
+    if let tmp = info[.arrow] {
+        setTr(titleLabel, CGPoint(x: tmp.x, y: tmp.y - titleLabel.bounds.height))
     }
 }
 ```
@@ -161,7 +176,7 @@ func bindWallControl(map: ARWorldMap?) throws {
     try wallArtwork.bindToARScene(sceneView, config: wallConfig)
 }
 ```
-That's it, now you just need to provide implementation for `delegate` and `provider`, call `bindWallControl` when you'll have some map and customize all UI as you wish. NOTE: see details for delegate, provider, and another part of implementation next. 
+That's it, next you should call `bindWallControl` when you'll have some map and customize all UI as you wish. 
 
 ### ArtworkMap 
 
@@ -192,203 +207,127 @@ ArtworkMap.save(session: session, url: url).then { [weak self] map in
 }
 ```
 
-### ARWallArtworkControlDelegate
+### ARWallArtworkControl public actions
 
-`func arWallArtworkControl(_ control: ARWallArtworkControl, showCoaching: Bool)` handle coaching show / hide states, so in general should be used to update UI for display or hide all necessary UI while coaching active / inactive.  
+`ARWallArtworkControl` contain some public methods that allow to: 
 
-`func arWallArtworkControl(_ control: ARWallArtworkControl, didSelectArtwork model: ARWallArtwork.ArtworkModel, placing: Bool, zoom: Float)` handle artwork selection, so in general should be use for update selected artwork info. 
-
-`func arWallArtworkControlDidUnselectArtwork(_ control: ARWallArtworkControl)` handle unselection, so in general should be used for hide all UI that chain with selected artwork. 
-
-### ARWallArtworkControlOverlayProvider
-
-`func arWallArtworkControl(_ control: ARWallArtworkControl, updateOverlayFor model: ArtworkModel, info: [ARWallArtwork.ArtworkSubNodeType : CGPoint])`  Update Overlay action for some specific AR artwork node subnodes. Called on Main / UI Queue each time in renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) with already converted 2D coords from 3D coords. Should be used only for update overlay items locations. `For example`: you support delegate and handle didSelect to update title of active artwork, but you should update coordinate for that title label only in overlay provider if you want to move that label with AR Artwork Node. NOTE: subnodes grabbed from `ARWallArtworkControl.configuration.overlaySubNodes`, so if you're not set some subnode there then it wouldn't appear here (see `ARWallArtworkControl.Configuration` details next).
-
-
-
-
-
-
-
-
-
-
-
-
-### Properties
-
-You can set input device to front or back camera. `(Default: .Back)`
-
+Bind to `ARSCNView` action. Should be called on initial step of config:
 ```swift
-cameraManager.cameraDevice = .front || .back
+func bindToARScene(_ sceneView: ARSCNView, config: Configuration = Configuration())
 ```
 
-You can specify if the front camera image should be horizontally fliped. `(Default: false)`
-
+Unbind action. Should be used on screen unload:
 ```swift
-cameraManager.shouldFlipFrontCameraImage = true || false
+func unbind()
 ```
 
-You can enable or disable gestures on camera preview. `(Default: true)`
-
+Add active placing node to screen constantly:
 ```swift
-cameraManager.shouldEnableTapToFocus = true || false
-cameraManager.shouldEnablePinchToZoom = true || false
-cameraManager.shouldEnableExposure = true || false
+func addActiveNode()
 ```
 
-You can set output format to Image, video or video with audio. `(Default: .stillImage)`
-
+Remove active placing node from screen:
 ```swift
-cameraManager.cameraOutputMode = .stillImage || .videoWithMic || .videoOnly
+func removeActiveNode()
 ```
 
-You can set the quality based on the [AVCaptureSession.Preset values](https://developer.apple.com/documentation/avfoundation/avcapturesession/preset) `(Default: .high)`
-
+Add new artwork on active detected wall (raycast mid point of screen to 3D). Newly added node moved with phone and should be stored with `addActiveNode()` or removed by `removeActiveNode()`:
 ```swift
-cameraManager.cameraOutputQuality = .low || .medium || .high || *
+func placeNewArtwork(model: ArtworkModel)
 ```
 
-`*` check all the possible values [here](https://developer.apple.com/documentation/avfoundation/avcapturesession/preset)
-
-You can also check if you can set a specific preset value:
-
+Reorder artwork allow to place artwork on new location or remove:
 ```swift
-if .cameraManager.canSetPreset(preset: .hd1280x720) {
-     cameraManager.cameraOutputQuality = .hd1280x720
-} else {
-    cameraManager.cameraOutputQuality = .high
-}
+func reorderArtwork(model: ArtworkModel)
 ```
 
-You can specify the focus mode. `(Default: .continuousAutoFocus)`
-
+Snapshot current active node or whole screen:
 ```swift
-cameraManager.focusMode = .autoFocus || .continuousAutoFocus || .locked
+func snapshot() -> (image: UIImage, model: ArtworkModel?)?
 ```
 
-You can specifiy the exposure mode. `(Default: .continuousAutoExposure)`
-
+Zoom selected artwork. Set 0 - 1 value:
 ```swift
-cameraManager.exposureMode = .autoExpose || .continuousAutoExposure || .locked || .custom
+func zoomSelectedArtwork(perc: Float)
 ```
 
-You can change the flash mode (it will also set corresponding flash mode). `(Default: .off)`
-
+Save scene : 
 ```swift
-cameraManager.flashMode = .off || .on || .auto
+func saveScene(url: URL) -> Promise<Void>
 ```
 
-You can specify the stabilisation mode to be used during a video record session. `(Default: .auto)`
+### ArtworkModel properties
 
+General artwork model for sunrare framework that used inside AR Node, Anchor and used for save / load inside ARWorldMap. 
+
+Content properties. Link that loaded and displayed. Type and size for that content: 
 ```swift
-cameraManager.videoStabilisationMode = .auto || .cinematic
+public var contentLink: String
+public var contentType: ContentType
+public var contentSize: CGSize
 ```
 
-You can get the video stabilization mode currently active. If video stabilization is neither supported or active it will return `.off`.
-
+Some artwork name properties:
 ```swift
-cameraManager.activeVideoStabilisationMode
+public var artworkName: String
+public var artistName: String
+public var ownerName: String
 ```
 
-You can enable location services for storing GPS location when saving to Camera Roll. `(Default: false)`
-
+NFT link:
 ```swift
-cameraManager.shouldUseLocationServices = true || false
+public var nftLink: String
 ```
 
-In case you use location it's mandatory to add `NSLocationWhenInUseUsageDescription` key to the `Info.plist` in your app. [More Info](https://developer.apple.com/documentation/uikit/protecting_the_user_s_privacy)
+### ARWallArtworkControl.Configuration properties
 
-For getting the gps location when calling `capturePictureWithCompletion` you should use the `CaptureResult` as `data` (see [Example App](https://github.com/imaginary-cloud/CameraManager/blob/master/Example%20App/ViewController.swift)).
+If `ARWallArtworkControl` used directly in case of custom UI implementation then could be used different configuration:
 
-You can specify if you want to save the files to phone library. `(Default: true)`
-
+By default raycast plane geometry used and it's enough for most purposes, but if need it could be changed to any other type that apple allow: 
 ```swift
-cameraManager.writeFilesToPhoneLibrary = true || false
+public var allowingRaycastTarget: ARRaycastQuery.Target = .existingPlaneGeometry
 ```
 
-You can specify the album names for image and video recordings.
-
+By default walls are not visualized. Could be used custom color to visualize detected walls
 ```swift
-cameraManager.imageAlbumName =  "Image Album Name"
-cameraManager.videoAlbumName =  "Video Album Name"
+public var visualizeDetectedPlane: UIColor? = nil
 ```
 
-You can specify if you want to disable animations. `(Default: true)`
-
+Here need to set exact sub nodes that would be used in screen overlay: 
 ```swift
-cameraManager.animateShutter = true || false
-cameraManager.animateCameraDeviceChange = true || false
+public var overlaySubNodes: Set<ArtworkSubNodeType> = Set([])
+
+//for example in default camera screen used:
+//wallConfig.overlaySubNodes = Set([.arrow,.reorder,.link,.zoom])
 ```
 
-You can specify if you want the user to be asked about camera permissions automatically when you first try to use the camera or manually. `(Default: true)`
-
+Each AR artwork node subnode could be configured to show some kind of content (image or color). By default subnodes used just as anchors for screen overlay, except content image subnode:
 ```swift
-cameraManager.showAccessPermissionPopupAutomatically = true || false
+public var artworkSubNodesContentInfo: [ArtworkSubNodeType: Any] = [:]
+
+//for example in default camera screen used:
+//wallConfig.artworkSubNodesContentInfo = [.artworkPlaceholder: img]
 ```
 
-To check if the device supports flash call:
-
+True - coaching will disppear when some real wall detected and (if some initial world map set) some saved artwork node detected. False - only some real wall detected. False is default value.
 ```swift
-cameraManager.hasFlash
+public var automaticallyCoaching: Bool = false
 ```
 
-To change flash mode to the next available one you can use this handy function which will also return current value for you to update the UI accordingly:
-
+To show some already exist artworks need to set initialWorldMap: 
 ```swift
-cameraManager.changeFlashMode()
+public var initialWorldMap: ARWorldMap? = nil
 ```
 
-You can even setUp your custom block to handle error messages:
-It can be customized to be presented on the Window root view controller, for example.
 
-```swift
-cameraManager.showErrorBlock = { (erTitle: String, erMessage: String) -> Void in
-    var alertController = UIAlertController(title: erTitle, message: erMessage, preferredStyle: .alert)
-    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { (alertAction) -> Void in
-    }))
+## Author
 
-    let topController = UIApplication.shared.keyWindow?.rootViewController
-
-    if (topController != nil) {
-        topController?.present(alertController, animated: true, completion: { () -> Void in
-            //
-        })
-    }
-
-}
-```
-
-You can set if you want to detect QR codes:
-
-```swift
-cameraManager.startQRCodeDetection { (result) in
-    switch result {
-    case .success(let value):
-        print(value)
-    case .failure(let error):
-        print(error.localizedDescription)
-    }
-}
-```
-
-and don't forget to call `cameraManager.stopQRCodeDetection()` whenever you done detecting.
-
-## Support
-
-Supports iOS 9 and above. Xcode 11.4 is required to build the latest code written in Swift 5.2.
-
-Now it's compatible with latest Swift syntax, so if you're using any Swift version prior to 5 make sure to use one of the previously tagged releases:
-
-- for Swift 4 see: [v4.4.0](https://github.com/imaginary-cloud/CameraManager/tree/4.4.0).
-- for Swift 3 see: [v3.2.0](https://github.com/imaginary-cloud/CameraManager/tree/3.2.0).
+//TODO: @Noah write info
 
 ## License
 
-Copyright © 2010-2020 [Imaginary Cloud](https://www.imaginarycloud.com/?utm_source=github). This library is licensed under the MIT license.
+//TODO: @Noah write info
 
-## About Imaginary Cloud
+## About AI Sundial Corp
 
-[![Imaginary Cloud](https://s3.eu-central-1.amazonaws.com/imaginary-images/Logo_IC_readme.svg)](https://www.imaginarycloud.com/?utm_source=github)
-
-At Imaginary Cloud, we build world-class web & mobile apps. Our Front-end developers and UI/UX designers are ready to create or scale your digital product. Take a look at our [website](https://www.imaginarycloud.com/?utm_source=github) and [get in touch!](https://www.imaginarycloud.com/contacts/?utm_source=github) We'll take it from there.
+//TODO: @Noah write info

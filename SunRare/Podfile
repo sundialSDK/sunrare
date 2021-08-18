@@ -1,0 +1,13 @@
+platform :ios, '13.0'
+use_frameworks!
+
+target 'SunRare' do
+  pod 'DeviceKit', '~> 4.4'
+  pod 'Kingfisher', '~> 6.3'
+  pod 'ProgressHUD', '~> 13.6'
+  pod 'HydraAsync', '~> 2.0'
+end
+
+target 'SunRareExample' do
+  
+end

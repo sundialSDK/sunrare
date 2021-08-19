@@ -20,6 +20,11 @@ it, simply add the following line to your Podfile:
 pod "SunRare", "1.0.0", :source => "git@github.com:sundialai/sundial-spec.git"
 ```
 
+## Installation with Swift Package Manager
+
+sunrare is available through [SwiftPackageManager](https://developer.apple.com/documentation/swift_packages). To install
+it, simply add the following link in `git@github.com:tubrokAlien/sunrare-framework.git` inside "Choose Package Repository" window on XCode. 
+
 ## How to use
 
 To use it you need to `import ARWallArtwork` and add required  `Privacy - Camera Usage Description` and `Privacy - Photo Library Additions Usage Description` to Info.plist and just need to call `ARWallArtworkControl.presentDefaultARCameraScreen` from some view controller with some custom configuration for load and save artworks if needed. 

@@ -17,7 +17,7 @@ sunrare is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'sunrare', '~> 1.0'
+pod "SunRare", "1.0.0", :source => "git@github.com:sundialai/sundial-spec.git"
 ```
 
 ## How to use
@@ -314,12 +314,14 @@ public var initialWorldMap: ARWorldMap? = nil
 
 ## Author
 
-//TODO: @Noah write info
+AI Sundial Corp (Sundial)
 
 ## License
 
-//TODO: @Noah write info
+Private use only license
+
+//TODO: !!!
 
 ## About AI Sundial Corp
 
-//TODO: @Noah write info
+//TODO: !!!

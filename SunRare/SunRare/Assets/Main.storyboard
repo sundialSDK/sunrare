@@ -28,7 +28,7 @@
         <!--Camera Screen-->
         <scene sceneID="6tx-1Z-qfg">
             <objects>
-                <viewController storyboardIdentifier="ARCameraScreen" modalPresentationStyle="fullScreen" id="L7V-Oy-0eh" customClass="ARCameraScreen" customModule="ARWallArtwork" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ARCameraScreen" modalPresentationStyle="fullScreen" id="L7V-Oy-0eh" customClass="ARCameraScreen" customModule="SunRare" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UqE-CJ-WjI">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -37,7 +37,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </arscnView>
                             <visualEffectView hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Duc-Rv-QTH">
-                                <rect key="frame" x="176" y="773" width="62" height="39"/>
+                                <rect key="frame" x="176" y="803" width="62" height="39"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="IEM-iy-yKp">
                                     <rect key="frame" x="0.0" y="0.0" width="62" height="39"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -69,7 +69,7 @@
                                 </userDefinedRuntimeAttributes>
                             </visualEffectView>
                             <visualEffectView hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VC0-nR-GkG">
-                                <rect key="frame" x="176" y="724" width="62" height="39"/>
+                                <rect key="frame" x="176" y="754" width="62" height="39"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="pqV-eI-mdd">
                                     <rect key="frame" x="0.0" y="0.0" width="62" height="39"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -101,7 +101,7 @@
                                 </userDefinedRuntimeAttributes>
                             </visualEffectView>
                             <visualEffectView hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6FP-zk-I9v">
-                                <rect key="frame" x="176" y="724" width="62" height="39"/>
+                                <rect key="frame" x="176" y="754" width="62" height="39"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="CnV-RL-t1Q">
                                     <rect key="frame" x="0.0" y="0.0" width="62" height="39"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -270,7 +270,7 @@
                             <constraint firstItem="T52-aE-T3N" firstAttribute="top" secondItem="UqE-CJ-WjI" secondAttribute="top" id="IO5-As-v8A"/>
                             <constraint firstItem="6FP-zk-I9v" firstAttribute="centerX" secondItem="2BI-lo-b2v" secondAttribute="centerX" id="N9n-L3-xfn"/>
                             <constraint firstItem="7qo-4B-18Q" firstAttribute="top" secondItem="UqE-CJ-WjI" secondAttribute="top" id="NEo-3l-MCT"/>
-                            <constraint firstItem="2BI-lo-b2v" firstAttribute="bottom" secondItem="Duc-Rv-QTH" secondAttribute="bottom" constant="50" id="OAr-cO-zH6"/>
+                            <constraint firstItem="2BI-lo-b2v" firstAttribute="bottom" secondItem="Duc-Rv-QTH" secondAttribute="bottom" constant="20" id="OAr-cO-zH6"/>
                             <constraint firstItem="oAx-3M-tGV" firstAttribute="leading" secondItem="2BI-lo-b2v" secondAttribute="leading" id="UaU-5A-pYm"/>
                             <constraint firstAttribute="bottom" secondItem="V0t-dg-j9E" secondAttribute="bottom" id="XVe-h6-2KG"/>
                             <constraint firstItem="7qo-4B-18Q" firstAttribute="leading" secondItem="UqE-CJ-WjI" secondAttribute="leading" constant="-100" id="XhA-Rk-p60"/>
@@ -321,7 +321,7 @@
         <!--Snapshot Screen-->
         <scene sceneID="Nw5-Nh-K85">
             <objects>
-                <viewController modalPresentationStyle="overFullScreen" id="n7W-4b-grN" customClass="SnapshotScreen" customModule="ARWallArtwork" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="overFullScreen" id="n7W-4b-grN" customClass="SnapshotScreen" customModule="SunRare" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" opaque="NO" contentMode="scaleToFill" id="5YW-lV-r1A">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

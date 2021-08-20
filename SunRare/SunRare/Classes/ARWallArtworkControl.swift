@@ -46,9 +46,25 @@ public class ARWallArtworkControl: NSObject {
     private var artworkNodes: [ArtworkNode] {
         return sceneView?.scene.rootNode.childNodes.compactMap({ $0 as? ArtworkNode }) ?? []
     }
+    
+    public override init() {
+        super.init()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(screenRotated), name: UIDevice.orientationDidChangeNotification, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
+    }
 }
 
 private extension ARWallArtworkControl {
+    @objc func screenRotated() {
+        DispatchQueue.main.async { [weak self] in
+            guard let tmp = self?.sceneView?.bounds else { return }
+            self?.overlayBounds = tmp
+        }
+    }
     @objc func didTap(gesture: UITapGestureRecognizer) {
         guard let scn = sceneView else { return }
         

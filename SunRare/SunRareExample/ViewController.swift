@@ -16,9 +16,13 @@ class ViewController: UIViewController {
     @IBOutlet weak var worldMapTextField: UITextField!
     
     //test all artworks
-    let allArtworks = [ArtworkModel(imageLink: "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg", contentType: .img, contentSize: CGSize(width: 1600, height: 664), artworkName: "Landscape", artistName: "Alen", ownerName: "Yahoo", nftLink: "https://www.google.com"),
-                       ArtworkModel(imageLink: "https://i.pinimg.com/736x/7e/1c/0b/7e1c0b3223789770299bc3b66b2fc2a0.jpg", contentType: .img, contentSize: CGSize(width: 607, height: 1080), artworkName: "Flower", artistName: "Sandra", ownerName: "Yahoo", nftLink: "https://www.rambler.ru"),
-                       ArtworkModel(imageLink: "https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg", contentType: .img, contentSize: CGSize(width: 332, height: 332), artworkName: "Grapefruit", artistName: "Tubrok", ownerName: "Yahoo", nftLink: "https://www.yahoo.com")]
+    let allArtworks = [ArtworkModel(contentLink: "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg", contentType: .img, contentSize: CGSize(width: 1600, height: 664), artworkName: "Landscape", artistName: "Alen", ownerName: "Yahoo", nftLink: "https://www.google.com"),
+                       
+                       ArtworkModel(contentLink: "https://i.pinimg.com/736x/7e/1c/0b/7e1c0b3223789770299bc3b66b2fc2a0.jpg", contentType: .img, contentSize: CGSize(width: 607, height: 1080), artworkName: "Flower", artistName: "Sandra", ownerName: "Yahoo", nftLink: "https://www.rambler.ru"),
+                       
+                       ArtworkModel(contentLink: "https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg", contentType: .img, contentSize: CGSize(width: 332, height: 332), artworkName: "Grapefruit", artistName: "Tubrok", ownerName: "Yahoo", nftLink: "https://www.yahoo.com"),
+    
+                       ArtworkModel(contentLink: "https://i.gifer.com/fxVE.gif", contentType: .gif, contentSize: CGSize(width: 540, height: 540), artworkName: "Animation", artistName: "GIFER", ownerName: "GIFER", nftLink: "https://i.gifer.com/fxVE.gif")]
     var newItmIdx = 0
     
     func showAlert(title: String, msg: String) {

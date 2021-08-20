@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7148800826CF997300E7DF62 /* UIImage+GIF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7148800726CF997300E7DF62 /* UIImage+GIF.swift */; };
 		7154A61A26CCD16F00D000A6 /* SunRare.h in Headers */ = {isa = PBXBuildFile; fileRef = 7154A61826CCD16F00D000A6 /* SunRare.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7154A63826CCD1A400D000A6 /* ArtworkNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7154A62126CCD1A400D000A6 /* ArtworkNode.swift */; };
 		7154A63926CCD1A400D000A6 /* SnapshotScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7154A62226CCD1A400D000A6 /* SnapshotScreen.swift */; };
@@ -59,6 +60,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7148800726CF997300E7DF62 /* UIImage+GIF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+GIF.swift"; sourceTree = "<group>"; };
 		7154A61526CCD16F00D000A6 /* SunRare.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SunRare.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7154A61826CCD16F00D000A6 /* SunRare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SunRare.h; sourceTree = "<group>"; };
 		7154A61926CCD16F00D000A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 				7154A62F26CCD1A400D000A6 /* Device+Ext.swift */,
 				7154A63026CCD1A400D000A6 /* Bundle+Ext.swift */,
 				7154A63126CCD1A400D000A6 /* SCNNode+Ext.swift */,
+				7148800726CF997300E7DF62 /* UIImage+GIF.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -338,6 +341,7 @@
 				7154A64826CCD1A400D000A6 /* ArtworkAnchor.swift in Sources */,
 				7154A64126CCD1A400D000A6 /* Errors.swift in Sources */,
 				7154A64026CCD1A400D000A6 /* Utils.swift in Sources */,
+				7148800826CF997300E7DF62 /* UIImage+GIF.swift in Sources */,
 				7154A64726CCD1A400D000A6 /* ARWallArtworkControl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

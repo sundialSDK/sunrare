@@ -19,6 +19,8 @@ class ArtworkNode: SCNNode {
     private(set) var linkIconNode: SCNNode
     private(set) var zoomIconNode: SCNNode
     
+    private var imgView: UIImageView?
+    
     var state: ArtworkState = .none {
         didSet {
             updateByState()
@@ -74,8 +76,8 @@ class ArtworkNode: SCNNode {
         addChildNode(reorderIconNode)
         addChildNode(zoomIconNode)
         
-        //load image
-        loadImage(url: URL(string: model.contentLink))
+        //load content
+        loadContent(url: URL(string: model.contentLink))
         
         //force reset
         updateByState()
@@ -92,15 +94,45 @@ class ArtworkNode: SCNNode {
         linkIconNode.isHidden = state != .selected
     }
     
-    private func loadImage(url: URL?) {
+    private func loadContent(url: URL?) {
         guard let tmp = url else { return }
-        DispatchQueue.global().async {
-            guard let data = try? Data(contentsOf: tmp),
-                  let img = UIImage(data: data)
-            else { return }
-            DispatchQueue.main.async { [weak self] in
-                self?.imageNode.geometry?.materials.first?.diffuse.contents = img
+        
+        //usefull props
+        let sz = model.contentSize
+        
+        switch model.contentType {
+        case .img:
+            //load content in bg
+            DispatchQueue.global().async {
+                guard let data = try? Data(contentsOf: tmp),
+                      let img = UIImage(data: data)?.cgImage
+                else { return }
+                
+                //fill content
+                DispatchQueue.main.async { [weak self] in
+                    self?.imageNode.geometry?.materials.first?.diffuse.contents = img
+                }
             }
+        case .gif:
+            //load content in bg
+            DispatchQueue.global().async {
+                guard let data = try? Data(contentsOf: tmp),
+                      let img = UIImage.gif(data: data)
+                else { return }
+                
+                //fill content
+                DispatchQueue.main.async { [weak self] in
+                    //use image view to handle correctly animations
+                    let tmp = UIImageView(frame: CGRect(origin: .zero, size: sz))
+                    tmp.image = img
+                    self?.imgView = tmp
+
+                    //use image view layer as contents
+                    self?.imageNode.geometry?.materials.first?.diffuse.contents = tmp.layer
+                }
+            }
+        default:
+            break
         }
     }
     

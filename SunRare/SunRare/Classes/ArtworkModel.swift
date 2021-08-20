@@ -75,8 +75,8 @@ public struct ArtworkModel: Codable {
      */
     public var nftLink: String
     
-    public init(imageLink: String, contentType: ContentType, contentSize: CGSize, artworkName: String, artistName: String, ownerName: String, nftLink: String) {
-        self.contentLink = imageLink
+    public init(contentLink: String, contentType: ContentType, contentSize: CGSize, artworkName: String, artistName: String, ownerName: String, nftLink: String) {
+        self.contentLink = contentLink
         self.contentType = contentType
         self.contentSize = contentSize
         self.artworkName = artworkName

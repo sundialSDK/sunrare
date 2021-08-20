@@ -9,6 +9,7 @@
 import Foundation
 import SceneKit
 import ARKit
+import AVFoundation
 
 class ArtworkNode: SCNNode {
     private(set) var model: ArtworkModel
@@ -19,12 +20,17 @@ class ArtworkNode: SCNNode {
     private(set) var linkIconNode: SCNNode
     private(set) var zoomIconNode: SCNNode
     
-    private var imgView: UIImageView?
+    private var cachedImgView: UIImageView?
+    private var cachedPlayer: AVPlayer?
     
     var state: ArtworkState = .none {
         didSet {
             updateByState()
         }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     init(model: ArtworkModel, contentInfo: [ArtworkSubNodeType: Any]) {
@@ -94,48 +100,6 @@ class ArtworkNode: SCNNode {
         linkIconNode.isHidden = state != .selected
     }
     
-    private func loadContent(url: URL?) {
-        guard let tmp = url else { return }
-        
-        //usefull props
-        let sz = model.contentSize
-        
-        switch model.contentType {
-        case .img:
-            //load content in bg
-            DispatchQueue.global().async {
-                guard let data = try? Data(contentsOf: tmp),
-                      let img = UIImage(data: data)?.cgImage
-                else { return }
-                
-                //fill content
-                DispatchQueue.main.async { [weak self] in
-                    self?.imageNode.geometry?.materials.first?.diffuse.contents = img
-                }
-            }
-        case .gif:
-            //load content in bg
-            DispatchQueue.global().async {
-                guard let data = try? Data(contentsOf: tmp),
-                      let img = UIImage.gif(data: data)
-                else { return }
-                
-                //fill content
-                DispatchQueue.main.async { [weak self] in
-                    //use image view to handle correctly animations
-                    let tmp = UIImageView(frame: CGRect(origin: .zero, size: sz))
-                    tmp.image = img
-                    self?.imgView = tmp
-
-                    //use image view layer as contents
-                    self?.imageNode.geometry?.materials.first?.diffuse.contents = tmp.layer
-                }
-            }
-        default:
-            break
-        }
-    }
-    
     func subNode(by type: ArtworkSubNodeType) -> SCNNode {
         switch type {
         case .artworkPlaceholder:
@@ -183,6 +147,94 @@ class ArtworkNode: SCNNode {
         }
         set(val) {
             imageNode.scale = SCNVector3(x: val, y: val, z: val)
+        }
+    }
+}
+
+
+extension ArtworkNode {
+    private func loadImage(url: URL) {
+        //load content in bg
+        DispatchQueue.global().async {
+            guard let data = try? Data(contentsOf: url),
+                  let img = UIImage(data: data)?.cgImage
+            else { return }
+            
+            //fill content
+            DispatchQueue.main.async { [weak self] in
+                self?.imageNode.geometry?.materials.first?.diffuse.contents = img
+            }
+        }
+    }
+    private func loadGIF(url: URL) {
+        let sz = model.contentSize
+        
+        //load content in bg
+        DispatchQueue.global().async {
+            guard let data = try? Data(contentsOf: url),
+                  let img = UIImage.gif(data: data)
+            else { return }
+            
+            //fill content
+            DispatchQueue.main.async { [weak self] in
+                //use image view to handle correctly animations
+                let tmp = UIImageView(frame: CGRect(origin: .zero, size: sz))
+                tmp.image = img
+                self?.cachedImgView = tmp
+
+                //use image view layer as contents
+                self?.imageNode.geometry?.materials.first?.diffuse.contents = tmp.layer
+            }
+        }
+    }
+    private func loadMP4(url: URL) {
+        let max = max(model.contentSize.width, model.contentSize.height)
+        let realSize = CGSize(width: model.contentSize.width/max, height: model.contentSize.height/max)
+        let sz = CGSize(width: UIScreen.main.bounds.width * realSize.width, height: UIScreen.main.bounds.height * realSize.height)
+                
+        let player = AVPlayer(url: url)
+        
+        // A SpriteKit scene to contain the SpriteKit video node
+        let spriteKitScene = SKScene(size: sz)
+        spriteKitScene.scaleMode = .aspectFit
+        
+        // To make the video loop
+        player.actionAtItemEnd = .none
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(playerItemDidReachEnd),
+            name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
+            object: player.currentItem)
+
+        // Create the SpriteKit video node, containing the video player
+        let videoSpriteKitNode = SKVideoNode(avPlayer: player)
+        videoSpriteKitNode.position = CGPoint(x: spriteKitScene.size.width / 2.0, y: spriteKitScene.size.height / 2.0)
+        videoSpriteKitNode.size = spriteKitScene.size
+        videoSpriteKitNode.yScale = -1.0
+        videoSpriteKitNode.play()
+        spriteKitScene.addChild(videoSpriteKitNode)
+                
+        imageNode.geometry?.materials.first?.diffuse.contents = spriteKitScene
+        
+        self.cachedPlayer = player
+    }
+    private func loadContent(url: URL?) {
+        guard let tmp = url else { return }
+        
+        switch model.contentType {
+        case .img:
+            loadImage(url: tmp)
+        case .gif:
+            loadGIF(url: tmp)
+        case .mp4:
+            loadMP4(url: tmp)
+        }
+    }
+    
+    // This callback will restart the video when it has reach its end
+    @objc func playerItemDidReachEnd(notification: NSNotification) {
+        if let playerItem: AVPlayerItem = notification.object as? AVPlayerItem {
+            playerItem.seek(to: CMTime.zero, completionHandler: nil)
         }
     }
 }

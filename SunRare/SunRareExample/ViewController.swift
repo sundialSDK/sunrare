@@ -15,18 +15,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var checkCameraAccessBeforeSwitch: UISwitch!
     @IBOutlet weak var worldMapTextField: UITextField!
     
-    //test all artworks
-    let allArtworks = [ArtworkModel(contentLink: "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg", contentType: .img, contentSize: CGSize(width: 1600, height: 664), artworkName: "Landscape", artistName: "Alen", ownerName: "Yahoo", nftLink: "https://www.google.com"),
-                       
-                       ArtworkModel(contentLink: "https://i.pinimg.com/736x/7e/1c/0b/7e1c0b3223789770299bc3b66b2fc2a0.jpg", contentType: .img, contentSize: CGSize(width: 607, height: 1080), artworkName: "Flower", artistName: "Sandra", ownerName: "Yahoo", nftLink: "https://www.rambler.ru"),
-                       
-                       ArtworkModel(contentLink: "https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg", contentType: .img, contentSize: CGSize(width: 332, height: 332), artworkName: "Grapefruit", artistName: "Tubrok", ownerName: "Yahoo", nftLink: "https://www.yahoo.com"),
-    
-                       ArtworkModel(contentLink: "https://i.gifer.com/fxVE.gif", contentType: .gif, contentSize: CGSize(width: 540, height: 540), artworkName: "Animation", artistName: "GIFER", ownerName: "GIFER", nftLink: "https://i.gifer.com/fxVE.gif"),
-    
-                       ArtworkModel(contentLink: "https://video-weaver.lax03.hls.ttvnw.net/v1/playlist/CpwEkQfRnlbp-qzTzVNIDGiQ9KWPPd4XOVcdKGq6THh_9bVZs0nqjSEw8KfHtW8fEuZodV1vSQExE_IbvhAojkKEc_-WO4PX1kXx61-d9X3TYYfhUWzv-GBkmhZmqqQDAWmDx--hQf73QbP0KR4U-ttxYA0fFp3aXZ3oiwT3lXjoWygjCnIewMGai5gWRGZpy32jTWZpi5Nxe_LJWMB2Lzph0gClfmY9GnJxcyThvNegwVZuj2m13A0RG7EG-N4PWw0DlQLgSx0EuWU7FFQbhqF5Bq8Eghr9poh5MDaqeGsgCNNc-bmEfFVOHXvbgIb4wqrCQWPNo-435OkRW3yZ65w8JJwfXpR1mrI0Xz6INaP0Kd7d7pw1JQdGePz2ILGP6cwkVVxQsg-xdvEoyJgV-3sJvZ4SXuHBlimv4WRl3miaMn0whm50pW1jSYetcALd3FwKkDu3p3EFcZ1UfvCUbSK9jRYnwseeGbM3xRf12DxYb9_tOssPU6AKlhwmmT0xNNohEOMUH7TjFB_c9l80YL3LTNeJS_GgihyTMvcfRrTpS_j0aiOxWhbijWVnaMauGGnvBVWGmXGDYfCxuMzhElg8P855IQkvIgN2-LVranYUgO_X1yibSM7acWrZkHn3qCHswHynpEOkhSSb5cfhsUjjL4dQlWeVPIBoLmeUU4DR9ngGyjAPFPAc4AW5HqQuXEjvKhhL50J6wK2ikYVkEhC3cxog6bLP496hOzln2pDHGgzHb9bF7OZjg0E1ijY.m3u8", contentType: .mp4, contentSize: CGSize(width: 1920, height: 1080), artworkName: "LOL", artistName: "zxcursed", ownerName: "zxcursed", nftLink: "https://www.twitch.tv/zxcursed")]
-    var newItmIdx = 0
-    
     func showAlert(title: String, msg: String) {
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
@@ -86,15 +74,82 @@ extension ViewController: UITextFieldDelegate {
 
 extension ViewController: ARWallArtworkCameraDataSource {
     func arWallArtworkFetchArtworkModel(in vc: UIViewController, completion: @escaping (ArtworkModel?) -> ()) {
+        guard let tmp = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(identifier: "AddNewArtworkScreen") as? AddNewArtworkScreen else { return }
+        tmp.completion = completion
+        vc.present(tmp, animated: true, completion: nil)
+    }
+}
+
+
+class AddNewArtworkScreen: UIViewController, UITextFieldDelegate {
+    @IBOutlet weak var typeSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var contentLinkField: UITextField!
+    @IBOutlet weak var contentWidthField: UITextField!
+    @IBOutlet weak var contentHeightField: UITextField!
+    @IBOutlet weak var artworkNameField: UITextField!
+    @IBOutlet weak var artistNameField: UITextField!
+    @IBOutlet weak var ownerNameField: UITextField!
+    @IBOutlet weak var nftLinkField: UITextField!
+    @IBOutlet weak var addCustomButton: UIButton!
+    
+    var completion: ((ArtworkModel?) -> ())?
+    
+    //test all artworks
+    let allArtworks = [ArtworkModel(contentLink: "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg", contentType: .img, contentSize: CGSize(width: 1600, height: 664), artworkName: "Landscape", artistName: "Alen", ownerName: "Yahoo", nftLink: "https://www.google.com"),
+                       
+                       ArtworkModel(contentLink: "https://i.pinimg.com/736x/7e/1c/0b/7e1c0b3223789770299bc3b66b2fc2a0.jpg", contentType: .img, contentSize: CGSize(width: 607, height: 1080), artworkName: "Flower", artistName: "Sandra", ownerName: "Yahoo", nftLink: "https://www.rambler.ru"),
+                       
+                       ArtworkModel(contentLink: "https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg", contentType: .img, contentSize: CGSize(width: 332, height: 332), artworkName: "Grapefruit", artistName: "Tubrok", ownerName: "Yahoo", nftLink: "https://www.yahoo.com"),
+    
+                       ArtworkModel(contentLink: "https://i.gifer.com/fxVE.gif", contentType: .gif, contentSize: CGSize(width: 540, height: 540), artworkName: "Animation", artistName: "GIFER", ownerName: "GIFER", nftLink: "https://i.gifer.com/fxVE.gif"),
+    
+                       ArtworkModel(contentLink: "https://img.rarible.com/prod/video/upload/prod-itemAnimations/0xd07dc4262bcdbf85190c01c996b4c06a461d2430:475644#t=0.1", contentType: .mp4, contentSize: CGSize(width: 1080, height: 1080), artworkName: "Rarible Artwork", artistName: "Rarible Artist", ownerName: "Rarible Owner", nftLink: "https://img.rarible.com/prod/video/upload/prod-itemAnimations/0xd07dc4262bcdbf85190c01c996b4c06a461d2430:475644#t=0.1")]
+    var newItmIdx = 0
+    
+    @IBAction func pressedAddCustom() {
+        guard let typeTtl = typeSegmentedControl.titleForSegment(at: typeSegmentedControl.selectedSegmentIndex),
+            let type = ArtworkModel.ContentType(rawValue: typeTtl),
+            let contentLink = contentLinkField.text,
+            let contentWidthStr = contentWidthField.text, let contentWidth = Int(contentWidthStr),
+            let contentHeightStr = contentHeightField.text, let contentHeight = Int(contentHeightStr),
+            let artworkName = artworkNameField.text,
+            let artistName = artistNameField.text,
+            let ownerName = ownerNameField.text,
+            let nftLink = nftLinkField.text else {
+            
+            //alert
+            let alert = UIAlertController(title: "Sorry", message: "All Fields Should be Filled!", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
+            show(alert, sender: self)
+            
+            return
+        }
+        
+        let model = ArtworkModel(contentLink: contentLink, contentType: type,
+                                 contentSize: CGSize(width: CGFloat(contentWidth), height: CGFloat(contentHeight)),
+                                 artworkName: artworkName, artistName: artistName, ownerName: ownerName, nftLink: nftLink)
+        completion?(model)
+        
+        dismiss(animated: true, completion: nil)
+    }
+    @IBAction func pressedAddGenerated() {
         //fail if no more artworks
         if newItmIdx > allArtworks.count - 1 {
             newItmIdx = 0
         }
         
         //fill
-        completion(allArtworks[newItmIdx])
+        completion?(allArtworks[newItmIdx])
 
         //get next one
         newItmIdx += 1
+        
+        //hide
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.endEditing(true)
+        return false
     }
 }

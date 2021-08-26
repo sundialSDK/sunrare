@@ -112,9 +112,9 @@
                                 </connections>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="500" borderStyle="roundedRect" placeholder="Width" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mLZ-1n-3jv">
-                                <rect key="frame" x="76" y="176" width="97" height="34"/>
+                                <rect key="frame" x="76" y="176" width="100" height="34"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="97" id="o3n-0h-ph5"/>
+                                    <constraint firstAttribute="width" constant="100" id="o3n-0h-ph5"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -123,9 +123,9 @@
                                 </connections>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="500" borderStyle="roundedRect" placeholder="Height" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="D27-qP-n87">
-                                <rect key="frame" x="297" y="176" width="97" height="34"/>
+                                <rect key="frame" x="294" y="176" width="100" height="34"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="97" id="tMO-Yi-qUU"/>
+                                    <constraint firstAttribute="width" constant="100" id="tMO-Yi-qUU"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -140,7 +140,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Height" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d7r-q3-ydf">
-                                <rect key="frame" x="236" y="182.5" width="51" height="21"/>
+                                <rect key="frame" x="233" y="182.5" width="51" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -237,6 +237,7 @@
                             <constraint firstItem="pbx-wR-WzX" firstAttribute="top" secondItem="cB1-5p-Uch" secondAttribute="bottom" constant="8" symbolic="YES" id="npN-qT-vSg"/>
                             <constraint firstItem="D27-qP-n87" firstAttribute="leading" secondItem="d7r-q3-ydf" secondAttribute="trailing" constant="10" id="pEw-cC-zma"/>
                             <constraint firstItem="BLZ-qz-fts" firstAttribute="trailing" secondItem="5oP-We-kH5" secondAttribute="trailing" id="tkk-zA-Giq"/>
+                            <constraint firstItem="d7r-q3-ydf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="mLZ-1n-3jv" secondAttribute="trailing" constant="8" symbolic="YES" id="x1b-X8-bCz"/>
                             <constraint firstItem="5oP-We-kH5" firstAttribute="leading" secondItem="sVy-gW-RNf" secondAttribute="leading" constant="20" id="yXB-lM-65M"/>
                         </constraints>
                     </view>

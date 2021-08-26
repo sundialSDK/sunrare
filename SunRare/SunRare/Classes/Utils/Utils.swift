@@ -11,6 +11,49 @@ import UIKit
 import ARKit
 
 /**
+ Cache provider for handle ar content
+ 
+ @discussion if not set then no cache used, so each time content would be loaded again
+ */
+public protocol ARWallArtworkCacheProvider: AnyObject {
+    /**
+     Cache Image Content Data associated with Artwork model
+     
+     @discussion Called async in DispatchQueue.global()
+     @param model Artwork model associated with content data
+     @param imageContent Image Content Data (+Gif as well) that should be saved
+     */
+    func cache(model: ArtworkModel, imageContent: Data)
+    
+    /**
+     Get Cached Image Data by artwork model
+     
+     @discussion Called async in DispatchQueue.global()
+     @param model Artwork model associated with content data
+     @result Image Cached Data if saved locally, otherwise nil
+     */
+    func getCachedImageContent(model: ArtworkModel) -> Data?
+
+    /**
+     Cache Video associated with Artwork model
+     
+     @discussion Called on main queue!
+     @param model Artwork model associated with video url
+     @param videoURL Remote Video URL that should be used to load content and saved locally
+     */
+    func cache(model: ArtworkModel, videoURL: URL)
+    
+    /**
+     Get Cached Video Local URL associated with Artwork model
+     
+     @discussion Called on main queue!
+     @param model Artwork model associated with video url
+     @result Local Video URL if video saved, otherwise nil
+     */
+    func getCachedVideoURL(model: ArtworkModel) -> URL?
+}
+
+/**
  Default Camera Data Source provide ability to fetch artwork and present some gallery over camera if needed.
  
  @discussion if not set to default camera then [+] would be hidden
@@ -237,6 +280,11 @@ public extension ARWallArtworkControl {
         //config
         camVc.config(configuration: configuration, datasource: datasource)
     }
+    
+    /**
+     Cache Provider that would be used for cache AR Content, NOTE: nil by default, so all content not cached!
+     */
+    static weak var cacheProvider: ARWallArtworkCacheProvider?
 }
 
 

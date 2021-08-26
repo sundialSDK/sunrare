@@ -104,7 +104,6 @@ class AddNewArtworkScreen: UIViewController, UITextFieldDelegate {
                        ArtworkModel(contentLink: "https://i.gifer.com/fxVE.gif", contentType: .gif, contentSize: CGSize(width: 540, height: 540), artworkName: "Animation", artistName: "GIFER", ownerName: "GIFER", nftLink: "https://i.gifer.com/fxVE.gif"),
     
                        ArtworkModel(contentLink: "https://img.rarible.com/prod/video/upload/prod-itemAnimations/0xd07dc4262bcdbf85190c01c996b4c06a461d2430:475644#t=0.1", contentType: .mp4, contentSize: CGSize(width: 1080, height: 1080), artworkName: "Rarible Artwork", artistName: "Rarible Artist", ownerName: "Rarible Owner", nftLink: "https://img.rarible.com/prod/video/upload/prod-itemAnimations/0xd07dc4262bcdbf85190c01c996b4c06a461d2430:475644#t=0.1")]
-    var newItmIdx = 0
     
     @IBAction func pressedAddCustom() {
         guard let typeTtl = typeSegmentedControl.titleForSegment(at: typeSegmentedControl.selectedSegmentIndex),
@@ -133,16 +132,8 @@ class AddNewArtworkScreen: UIViewController, UITextFieldDelegate {
         dismiss(animated: true, completion: nil)
     }
     @IBAction func pressedAddGenerated() {
-        //fail if no more artworks
-        if newItmIdx > allArtworks.count - 1 {
-            newItmIdx = 0
-        }
-        
         //fill
-        completion?(allArtworks[newItmIdx])
-
-        //get next one
-        newItmIdx += 1
+        completion?(allArtworks.randomElement())
         
         //hide
         dismiss(animated: true, completion: nil)

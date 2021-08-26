@@ -154,11 +154,22 @@ class ArtworkNode: SCNNode {
 
 extension ArtworkNode {
     private func loadImage(url: URL) {
+        let tmpModel = model
+        
         //load content in bg
         DispatchQueue.global().async {
-            guard let data = try? Data(contentsOf: url),
+            //get cached data
+            let cached = ARWallArtworkControl.cacheProvider?.getCachedImageContent(model: tmpModel)
+
+            //get content
+            guard let data = cached ?? (try? Data(contentsOf: url)),
                   let img = UIImage(data: data)?.cgImage
             else { return }
+            
+            //cache newly loaded data
+            if cached == nil {
+                ARWallArtworkControl.cacheProvider?.cache(model: tmpModel, imageContent: data)
+            }
             
             //fill content
             DispatchQueue.main.async { [weak self] in
@@ -167,13 +178,23 @@ extension ArtworkNode {
         }
     }
     private func loadGIF(url: URL) {
+        let tmpModel = model
         let sz = model.contentSize
         
         //load content in bg
         DispatchQueue.global().async {
+            //get cached data
+            let cached = ARWallArtworkControl.cacheProvider?.getCachedImageContent(model: tmpModel)
+
+            //get content
             guard let data = try? Data(contentsOf: url),
                   let img = UIImage.gif(data: data)
             else { return }
+            
+            //cache newly loaded data
+            if cached == nil {
+                ARWallArtworkControl.cacheProvider?.cache(model: tmpModel, imageContent: data)
+            }
             
             //fill content
             DispatchQueue.main.async { [weak self] in
@@ -188,12 +209,20 @@ extension ArtworkNode {
         }
     }
     private func loadMP4(url: URL) {
+        //cache
+        let cachedURL = ARWallArtworkControl.cacheProvider?.getCachedVideoURL(model: model)
+        if cachedURL == nil {
+            ARWallArtworkControl.cacheProvider?.cache(model: model, videoURL: url)
+        }
+        
+        //screen size with aspect ratio on content size
         let max = max(model.contentSize.width, model.contentSize.height)
         let realSize = CGSize(width: model.contentSize.width/max, height: model.contentSize.height/max)
         let sz = CGSize(width: UIScreen.main.bounds.width * realSize.width, height: UIScreen.main.bounds.height * realSize.height)
                 
-        let player = AVPlayer(url: url)
-        
+        //video
+        let player = AVPlayer(url: cachedURL ?? url)
+                
         // A SpriteKit scene to contain the SpriteKit video node
         let spriteKitScene = SKScene(size: sz)
         spriteKitScene.scaleMode = .aspectFit

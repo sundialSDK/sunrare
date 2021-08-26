@@ -110,6 +110,17 @@ extension ARCameraScreen {
 }
 
 private extension ARCameraScreen {
+    func showSysInfo(_ txt: String, succ: Bool) {
+        //show load scene status
+        sysInfoLabel.textColor = succ ? UIColor.green : UIColor.red
+        sysInfoLabel.text = txt
+        sysInfoLabel.isHidden = false
+        
+        //hide after some delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
+            self?.sysInfoLabel.isHidden = true
+        }
+    }
     func bindWallControl(map: ARWorldMap?) throws {
         var wallConfig = ARWallArtworkControl.Configuration()
         wallConfig.initialWorldMap = map
@@ -122,13 +133,7 @@ private extension ARCameraScreen {
     func initialWorldMapDidLoad(succ: Bool, url: URL) {
         //show load scene status
         let txt = "World Map [\(url.lastPathComponent)]" + (succ ? " loaded succesfully" : " load failed")
-        sysInfoLabel.textColor = succ ? UIColor.green : UIColor.red
-        sysInfoLabel.text = txt
-        
-        //hide after some delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
-            self?.sysInfoLabel.isHidden = true
-        }
+        showSysInfo(txt, succ: succ)
     }
 }
 
@@ -200,7 +205,11 @@ extension ARCameraScreen {
     @IBAction func pressedSave() {
         guard let url = worldMapSaveURL else { return }
         
-        wallArtwork.saveScene(url: url)
+        wallArtwork.saveScene(url: url) { [weak self] error in
+            let succ = error == nil
+            let txt = succ ? "Saved Successfully" : "Save Failed"
+            self?.showSysInfo(txt, succ: succ)
+        }
     }
 }
 

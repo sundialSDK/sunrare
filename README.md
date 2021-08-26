@@ -82,6 +82,14 @@ ARWallArtworkControl.requestCameraAccess { granted in
 
 That's it, this is how it easy. 
 
+## Cache Content
+
+If you want to cache AR content then you need to provide ability for it by yourself. Basically SunRare give public protocol `ARWallArtworkCacheProvider` that should be supported and set to `ARWallArtworkControl.cacheProvider`. By default AR content are not cached. 
+
+```swift
+ARWallArtworkControl.cacheProvider = self //ARWallArtworkCacheProvider control
+```
+
 ## Customize UI and Behaviour
 
 If you want to customize UI and support whole power of `ARWallArtwork` framework you need to support `ARWallArtworkControl` directly with delegate and overlay provider instead of use `ARWallArtworkControl.presentDefaultARCameraScreen`.

@@ -90,6 +90,66 @@ If you want to cache AR content then you need to provide ability for it by yours
 ARWallArtworkControl.cacheProvider = self //ARWallArtworkCacheProvider control
 ```
 
+If you want to save and load image content data then you need to store data locally by using some of info from `ArtworkModel`, NOTE: it's already called in background queue, so be aware of any kind of additional manipulation that could break it, see example:
+
+```swift
+
+//NOTE: cache value could be simple memory storage or some kind of disk storage, it's really depend on your purposes
+
+extension ArtworkModel {
+    var uid: String {
+        return artistName + artworkName + ownerName
+    }
+}
+
+func cache(model: ArtworkModel, imageContent: Data) {
+    cache.setObject(imageContent, forKey: model.uid)
+}
+
+func getCachedImageContent(model: ArtworkModel) -> Data? {
+    return cache.object(forKey: model.uid)
+}
+```
+
+If you want to save and load video content data locally then you need to provide whole download and store video file logic. NOTE: in opposite to image data cache logic, video supported just by providing `URL`, so nothing downloaded manually in background queue, but simply used `URL` directly in main queue. See example: 
+
+```swift
+
+extension ArtworkModel {
+    var uid: String {
+        return artistName + artworkName + ownerName
+    }
+}
+
+private func localURL(for model: ArtworkModel) -> URL? {
+    return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(model.uid + ".mp4")
+}
+
+func cache(model: ArtworkModel, videoURL: URL) {
+    guard let localUrl = localURL(for: model) else { return }
+    
+    //do nothing if already saved
+    if FileManager.default.fileExists(atPath: localUrl.path) { return }
+    
+    //save
+    DispatchQueue.global().async {
+        if let data = try? Data(contentsOf: videoURL) {
+            do {
+                try data.write(to: localUrl)
+            }
+            catch let e {
+                NSLog("cache video error: \(e)")
+            }
+        }
+    }
+}
+
+func getCachedVideoURL(model: ArtworkModel) -> URL? {
+    guard let localUrl = localURL(for: model) else { return nil }
+    return FileManager.default.fileExists(atPath: localUrl.path) ? localUrl : nil
+}
+```
+
 ## Customize UI and Behaviour
 
 If you want to customize UI and support whole power of `ARWallArtwork` framework you need to support `ARWallArtworkControl` directly with delegate and overlay provider instead of use `ARWallArtworkControl.presentDefaultARCameraScreen`.

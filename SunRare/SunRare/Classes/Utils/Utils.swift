@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import ARKit
+import ProgressHUD
 
 /**
  Cache provider for handle ar content
@@ -262,6 +263,13 @@ public extension ARWallArtworkControl {
      @param in source view controller that used for present default AR Camera Screen
      */
     static func presentDefaultARCameraScreen(configuration: DefaultARCameraConfiguration, datasource: ARWallArtworkCameraDataSource?, in vc: UIViewController) throws {
+        
+        //test purposes
+        ProgressHUD.show()
+        defer {
+            ProgressHUD.dismiss()
+        }
+        
         //a12 chip required
         if !self.isDeviceSupported() {
             throw GeneralError.a12Required

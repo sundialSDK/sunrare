@@ -25,6 +25,10 @@ pod "SunRare", "1.0.9", :source => "git@github.com:sundialai/sundial-spec.git"
 sunrare is available through [SwiftPackageManager](https://developer.apple.com/documentation/swift_packages). To install
 it, simply add the following link in `git@github.com:tubrokAlien/sunrare-framework.git` inside "Choose Package Repository" window on XCode. 
 
+## Manual Installation
+
+SunRare framework could be easily installed manually - you just need to grab SunRare.xcframework and move it to `Frameworks,Libaries, and Embedded Content` section on `General` tab by choosing exact app target.
+
 ## How to use
 
 To use it you need to `import ARWallArtwork` and add required  `Privacy - Camera Usage Description` and `Privacy - Photo Library Additions Usage Description` to Info.plist and just need to call `ARWallArtworkControl.presentDefaultARCameraScreen` from some view controller with some custom configuration for load and save artworks if needed. 

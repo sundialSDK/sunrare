@@ -1,0 +1,11 @@
+framework module SunRare {
+  umbrella header "SunRare.h"
+
+  export *
+  module * { export * }
+}
+
+module SunRare.Swift {
+    header "SunRare-Swift.h"
+    requires objc
+}

@@ -23,7 +23,7 @@ pod "SunRare", :source => "git@github.com:sundialai/sunrare.git"
 ## Installation with Swift Package Manager
 
 sunrare is available through [SwiftPackageManager](https://developer.apple.com/documentation/swift_packages). To install
-it, simply add the following link in `git@github.com:tubrokAlien/sunrare-framework.git` inside "Choose Package Repository" window on XCode. 
+it, simply add the following link in `git@github.com:sundialai/sunrare.git` inside "Choose Package Repository" window on XCode. 
 
 ## Manual Installation
 

@@ -17,7 +17,7 @@ sunrare is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod "SunRare", "1.0.9", :source => "git@github.com:sundialai/sundial-spec.git"
+pod "SunRare", :source => "git@github.com:sundialai/sunrare.git"
 ```
 
 ## Installation with Swift Package Manager

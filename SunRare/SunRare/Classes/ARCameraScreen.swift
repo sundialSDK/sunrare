@@ -38,7 +38,7 @@ class ARCameraScreen: UIViewController {
     private weak var datasource: ARWallArtworkCameraDataSource?
         
     private lazy var wallArtwork: ARWallArtworkControl = {
-        var tmp = ARWallArtworkControl()
+        let tmp = ARWallArtworkControl()
         tmp.delegate = self
         tmp.overlayProvider = self
         return tmp

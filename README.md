@@ -170,7 +170,7 @@ Next you need to create `ARWallArtworkControl` property inside of your screen:
 
 ```swift
 private lazy var wallArtwork: ARWallArtworkControl = {
-    var tmp = ARWallArtworkControl()
+    let tmp = ARWallArtworkControl()
     tmp.delegate = self
     tmp.overlayProvider = self
     return tmp

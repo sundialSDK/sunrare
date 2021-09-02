@@ -189,6 +189,9 @@ public extension ARWallArtworkControl {
             self.tapGesture = nil
         }
         
+        //unselect
+        selectNode(nil)
+        
         //reset scene
         sceneView?.delegate = nil
         sceneView = nil
@@ -361,6 +364,15 @@ public extension ARWallArtworkControl {
     @discardableResult func reorderSelectedArtwork() -> Bool {
         guard let model = selectedNode?.model else { return false }
         return self.reorderArtwork(model: model)
+    }
+    
+    /**
+     Unselect artwork
+     
+     @discussion -
+     */
+    func unselectArtwork() {
+        selectNode(nil)
     }
 }
 

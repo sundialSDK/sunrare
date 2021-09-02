@@ -157,6 +157,7 @@ extension ARWallArtworkControl {
   public func openSelectedArtworkNFTLink() -> Swift.Bool
   @discardableResult
   public func reorderSelectedArtwork() -> Swift.Bool
+  public func unselectArtwork()
 }
 extension ARWallArtworkControl : ARKit.ARSCNViewDelegate {
   @objc dynamic public func renderer(_ renderer: SceneKit.SCNSceneRenderer, nodeFor anchor: ARKit.ARAnchor) -> SceneKit.SCNNode?

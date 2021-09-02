@@ -206,11 +206,11 @@ public extension ARWallArtworkControl {
         public var artworkSubNodesContentInfo: [ArtworkSubNodeType: Any] = [:]
         
         /**
-         True - coaching will disppear when some real wall detected and (if some initial world map set) some saved artwork node detected. False - only some real wall detected. False is default value.
+         True - coaching will disppear when some real wall detected and (if some initial world map set) some saved artwork node detected. False - only some real wall detected. False is default value. Nil mean no coaching at all
          
          @discussion if False set and some initialWorldMap set then saved artwork nodes could appear after some delay after scan old location
          */
-        public var automaticallyCoaching: Bool = false
+        public var automaticallyCoaching: Bool? = false
         
         /**
          Some saved artworks that would appear in ARSCView

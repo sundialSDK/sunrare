@@ -114,7 +114,7 @@ extension ARWallArtworkControl {
     public var visualizeDetectedPlane: UIKit.UIColor?
     public var overlaySubNodes: Swift.Set<SunRare.ArtworkSubNodeType>
     public var artworkSubNodesContentInfo: [SunRare.ArtworkSubNodeType : Any]
-    public var automaticallyCoaching: Swift.Bool
+    public var automaticallyCoaching: Swift.Bool?
     public var initialWorldMap: ARKit.ARWorldMap?
     public init()
   }

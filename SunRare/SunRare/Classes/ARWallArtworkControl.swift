@@ -169,7 +169,9 @@ public extension ARWallArtworkControl {
         sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
         
         //coaching
-        coachingControl.setOverlay(in: sceneView, automatically: self.configuration.automaticallyCoaching, forDetectionType: .verticalPlane, coachingDelegate: self)
+        if let tmp = self.configuration.automaticallyCoaching {
+            coachingControl.setOverlay(in: sceneView, automatically: tmp, forDetectionType: .verticalPlane, coachingDelegate: self)
+        }
         
         //tap gesture
         let tap = UITapGestureRecognizer(target: self, action: #selector(didTap))
@@ -188,6 +190,9 @@ public extension ARWallArtworkControl {
             sceneView?.removeGestureRecognizer(tap)
             self.tapGesture = nil
         }
+        
+        //clear all artworks
+        artworkNodes.forEach({ $0.removeFromParentNode() })
         
         //unselect
         selectNode(nil)
@@ -389,7 +394,7 @@ extension ARWallArtworkControl: ARSCNViewDelegate {
     }
     public func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         //hide coaching if start detect something
-        if !configuration.automaticallyCoaching && coachingControl.isActive {
+        if let tmp = configuration.automaticallyCoaching, !tmp && coachingControl.isActive {
             coachingControl.hideCoaching()
         }
         

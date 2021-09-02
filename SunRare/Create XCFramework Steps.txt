@@ -1,0 +1,16 @@
+Open Terminal -> Go To SunRare folder -> Run each command in terminal
+
+1. xcodebuild archive -scheme SunRare -destination "generic/platform=iOS Simulator" -archivePath ../output/SunRare-iOS-Sim
+
+2. xcodebuild archive -scheme SunRare -destination "generic/platform=iOS" -archivePath ../output/SunRare-iOS
+
+3. xcodebuild -create-xcframework -framework ../output/SunRare-iOS.xcarchive/Products/Library/Frameworks/SunRare.framework/ -framework ../output/SunRare-iOS-Sim.xcarchive/Products/Library/Frameworks/SunRare.framework/ -output ../SunRare.xcframework
+
+OR
+
+open CreateXCFramework.command via text editor and replace [SunRare sources folder path] with actual path
+-->
+open terminal and add:
+chmod u+x CreateXCFramework.command
+-->
+launch CreateXCFramework.command

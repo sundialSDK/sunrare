@@ -147,10 +147,16 @@ extension ARWallArtworkControl {
   public func addActiveNode()
   public func removeActiveNode()
   public func placeNewArtwork(model: SunRare.ArtworkModel)
-  public func reorderArtwork(model: SunRare.ArtworkModel)
+  @discardableResult
+  public func reorderArtwork(model: SunRare.ArtworkModel) -> Swift.Bool
   public func snapshot() -> (image: UIKit.UIImage, model: SunRare.ArtworkModel?)?
-  public func zoomSelectedArtwork(perc: Swift.Float)
+  @discardableResult
+  public func zoomSelectedArtwork(perc: Swift.Float) -> Swift.Bool
   public func saveScene(url: Foundation.URL, completion: ((Swift.Error?) -> ())? = nil)
+  @discardableResult
+  public func openSelectedArtworkNFTLink() -> Swift.Bool
+  @discardableResult
+  public func reorderSelectedArtwork() -> Swift.Bool
 }
 extension ARWallArtworkControl : ARKit.ARSCNViewDelegate {
   @objc dynamic public func renderer(_ renderer: SceneKit.SCNSceneRenderer, nodeFor anchor: ARKit.ARAnchor) -> SceneKit.SCNNode?

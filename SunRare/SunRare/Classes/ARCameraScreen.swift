@@ -32,7 +32,6 @@ class ARCameraScreen: UIViewController {
     
     @IBOutlet weak var sysInfoLabel: UILabel!
     
-    private var activeModel: ArtworkModel?
     private var zoomMoving: CGFloat?
     private var worldMapSaveURL: URL?
     private weak var datasource: ARWallArtworkCameraDataSource?
@@ -164,15 +163,10 @@ extension ARCameraScreen {
     }
     
     @IBAction func pressedRarible() {
-        guard let link = activeModel?.nftLink,
-              let url = URL(string: link)
-        else { return }
-        
-        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        wallArtwork.openSelectedArtworkNFTLink()
     }
     @IBAction func pressedReorder() {
-        guard let model = activeModel else { return }
-        wallArtwork.reorderArtwork(model: model)
+        wallArtwork.reorderSelectedArtwork()
     }
     
     @IBAction func draggingZoom(gesture: UIPanGestureRecognizer) {
@@ -224,8 +218,6 @@ extension ARCameraScreen: ARWallArtworkControlDelegate {
         }
     }
     func arWallArtworkControl(_ control: ARWallArtworkControl, didSelectArtwork model: ArtworkModel, placing: Bool, zoom: Float) {
-        //save
-        activeModel = model
         
         //fill names
         titleLabel.text = model.artworkName
@@ -249,9 +241,6 @@ extension ARCameraScreen: ARWallArtworkControlDelegate {
     }
     
     func arWallArtworkControlDidUnselectArtwork(_ control: ARWallArtworkControl) {
-        //reset
-        activeModel = nil
-        
         //title
         infoContainer.isHidden = true
         

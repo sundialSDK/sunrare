@@ -257,10 +257,11 @@ public extension ARWallArtworkControl {
      
      @discussion nothing happens if can't find artwork node with exact artwork model
      @param model ArtworkModel that would be used for search exist node
+     @result True if node start reording succesfully, False if node not found in child nodes
      */
-    func reorderArtwork(model: ArtworkModel) {
+    @discardableResult func reorderArtwork(model: ArtworkModel) -> Bool {
         //search node
-        guard let node = artworkNodes.first(where: { $0.model == model }) else { return }
+        guard let node = artworkNodes.first(where: { $0.model == model }) else { return false }
         
         //unselect
         selectNode(nil)
@@ -276,6 +277,8 @@ public extension ARWallArtworkControl {
             placingNode = node
             selectNode(node)
         }
+        
+        return true
     }
     
     /**
@@ -307,12 +310,15 @@ public extension ARWallArtworkControl {
      
      @discussion nothing happens if no selected node.
      @param perc zoom value in 0-1 format
+     @result True if selected node zoomed succesfully, otherwise False
      */
-    func zoomSelectedArtwork(perc: Float) {
-        guard let node = selectedNode else { return }
+    @discardableResult func zoomSelectedArtwork(perc: Float) -> Bool {
+        guard let node = selectedNode else { return false }
         
         node.zoomArtwork = perc
         (sceneView?.anchor(for: node) as? ArtworkAnchor)?.zoom = perc
+        
+        return true
     }
     
     /**
@@ -329,6 +335,32 @@ public extension ARWallArtworkControl {
             return
         }
         ArtworkMap.save(session: session, url: url, completion: completion)
+    }
+    
+    /**
+     Open selected artwork nft link in safari
+     
+     @discussion useful in case if need to call nft link action for selected node
+     @result True if ntf link opened succesfully, otherwise False
+     */
+    @discardableResult func openSelectedArtworkNFTLink() -> Bool {
+        guard let link = selectedNode?.model.nftLink,
+              let url = URL(string: link)
+        else { return false }
+        
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        return true
+    }
+    
+    /**
+     Reorder selected artwork
+     
+     @discussion useful in case if need to call reorder action for selected node
+     @result True if node start reording succesfully, False if node not found in child nodes
+     */
+    @discardableResult func reorderSelectedArtwork() -> Bool {
+        guard let model = selectedNode?.model else { return false }
+        return self.reorderArtwork(model: model)
     }
 }
 

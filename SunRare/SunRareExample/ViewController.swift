@@ -32,7 +32,7 @@ class ViewController: UIViewController {
         config.worldMapSaveURL = mapURL
         
         do {
-            try ARWallArtworkControl.presentDefaultARCameraScreen(configuration: config, datasource: self, in: self)
+            try ARWallArtworkControl.defaultARCameraScreen(configuration: config, datasource: self, showIn: self)
         }
         catch let e {
             let alert = UIAlertController(title: "Error", message: e.localizedDescription, preferredStyle: .alert)

@@ -31,7 +31,7 @@ SunRare framework could be easily installed manually - you just need to grab Sun
 
 ## How to use
 
-To use it you need to `import ARWallArtwork` and add required  `Privacy - Camera Usage Description` and `Privacy - Photo Library Additions Usage Description` to Info.plist and just need to call `ARWallArtworkControl.presentDefaultARCameraScreen` from some view controller with some custom configuration for load and save artworks if needed. 
+To use it you need to `import ARWallArtwork` and add required  `Privacy - Camera Usage Description` and `Privacy - Photo Library Additions Usage Description` to Info.plist and just need to call `ARWallArtworkControl.defaultARCameraScreen` from some view controller with some custom configuration for load and save artworks if needed. 
 
 ```swift
 let name = "myFirstArtwork.artworkmap"
@@ -44,7 +44,7 @@ config.worldMapSaveURL = mapURL
 
 //show it
 do {
-    try ARWallArtworkControl.presentDefaultARCameraScreen(configuration: config, datasource: self, in: self)
+    try ARWallArtworkControl.defaultARCameraScreen(configuration: config, datasource: self, showIn: self)
 }
 catch let e {
     ProgressHUD.showError(e.localizedDescription, image: nil, interaction: false)

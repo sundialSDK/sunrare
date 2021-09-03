@@ -41,6 +41,21 @@ extension ArtworkMap {
   public static func save(session: ARKit.ARSession, url: Foundation.URL, completion: ((Swift.Error?) -> ())? = nil)
   public static func load(url: Foundation.URL, completion: @escaping (Swift.Error?, ARKit.ARWorldMap?) -> ())
 }
+@objc @_inheritsConvenienceInitializers public class ARCameraScreen : UIKit.UIViewController {
+  @objc override dynamic public func viewDidLoad()
+  @objc override dynamic public func prepare(for segue: UIKit.UIStoryboardSegue, sender: Any?)
+  @objc deinit
+  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+}
+extension ARCameraScreen : SunRare.ARWallArtworkControlDelegate {
+  public func arWallArtworkControl(_ control: SunRare.ARWallArtworkControl, showCoaching: Swift.Bool)
+  public func arWallArtworkControl(_ control: SunRare.ARWallArtworkControl, didSelectArtwork model: SunRare.ArtworkModel, placing: Swift.Bool, zoom: Swift.Float)
+  public func arWallArtworkControlDidUnselectArtwork(_ control: SunRare.ARWallArtworkControl)
+}
+extension ARCameraScreen : SunRare.ARWallArtworkControlOverlayProvider {
+  public func arWallArtworkControl(_ control: SunRare.ARWallArtworkControl, updateOverlayFor model: SunRare.ArtworkModel, info: [SunRare.ArtworkSubNodeType : CoreGraphics.CGPoint])
+}
 extension UIDevice {
   public static var identifier: Swift.String
 }
@@ -120,7 +135,8 @@ extension ARWallArtworkControl {
   }
   public static func isDeviceSupported() -> Swift.Bool
   public static func requestCameraAccess(completion: @escaping (Swift.Bool) -> ())
-  public static func presentDefaultARCameraScreen(configuration: SunRare.DefaultARCameraConfiguration, datasource: SunRare.ARWallArtworkCameraDataSource?, in vc: UIKit.UIViewController) throws
+  @discardableResult
+  public static func defaultARCameraScreen(configuration: SunRare.DefaultARCameraConfiguration, datasource: SunRare.ARWallArtworkCameraDataSource?, showIn vc: UIKit.UIViewController? = nil) throws -> SunRare.ARCameraScreen
   weak public static var cacheProvider: SunRare.ARWallArtworkCacheProvider?
 }
 public struct DefaultARCameraConfiguration {

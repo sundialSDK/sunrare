@@ -254,31 +254,43 @@ public extension ARWallArtworkControl {
     }
     
     /**
-     Present default AR Camera Screen with configuration and datasource over some view controller
+     Create default AR Camera Screen with configuration and datasource and show if needed
      
      @discussion could be used for show some default AR Camera Screen, but if need to customize UI then need to support ARWallArtworkControl directly with delegate and overlay provider.
      @param configuration some configuration for default ar camera screen
      @param datasource bind to [+] button inside AR Camera Screen. If set then called by press or whole button hidden if datasource set nil
-     @param in source view controller that used for present default AR Camera Screen
+     @param showIn If set camera screen show immediately in navigation or presented modally if simply view controller used
+     @result default ARCameraScreen instance
      */
-    static func presentDefaultARCameraScreen(configuration: DefaultARCameraConfiguration, datasource: ARWallArtworkCameraDataSource?, in vc: UIViewController) throws {
+    @discardableResult static func defaultARCameraScreen(configuration: DefaultARCameraConfiguration, datasource: ARWallArtworkCameraDataSource?, showIn vc: UIViewController? = nil) throws -> ARCameraScreen {
+        
         //a12 chip required
         if !self.isDeviceSupported() {
             throw GeneralError.a12Required
         }
         
         //instantiate camera
-        guard let nav = UIStoryboard(name: "Main", bundle: Bundle.current).instantiateInitialViewController() as? UINavigationController,
-              let camVc = nav.viewControllers.first as? ARCameraScreen
+        guard let camVc = UIStoryboard(name: "Main", bundle: Bundle.current).instantiateInitialViewController() as? ARCameraScreen
         else {
             throw GeneralError.defaultCameraFailed
         }
-        
-        //show
-        vc.present(nav, animated: true, completion: nil)
-        
+                
         //config
         camVc.config(configuration: configuration, datasource: datasource)
+        
+        //show if needed
+        if let present = vc {
+            if vc is UINavigationController {
+                present.show(camVc, sender: nil)
+            }
+            else {
+                let nav = UINavigationController(rootViewController: camVc)
+                nav.setNavigationBarHidden(true, animated: false)
+                present.present(nav, animated: true, completion: nil)
+            }
+        }
+        
+        return camVc
     }
     
     /**

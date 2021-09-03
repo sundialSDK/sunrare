@@ -11,7 +11,7 @@ import UIKit
 import SceneKit
 import ARKit
 
-class ARCameraScreen: UIViewController {
+public class ARCameraScreen: UIViewController {
     @IBOutlet weak var sceneView: ARSCNView!
     @IBOutlet weak var placeNewButton: UIButton!
     @IBOutlet weak var addNodeButtonContainer: UIView!
@@ -43,7 +43,7 @@ class ARCameraScreen: UIViewController {
         return tmp
     }()
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         //config
@@ -56,7 +56,7 @@ class ARCameraScreen: UIViewController {
         sceneView.session.run(ARWorldTrackingConfiguration(), options: [.removeExistingAnchors, .resetTracking])
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    public override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         
         if let vc = segue.destination as? SnapshotScreen,
@@ -209,7 +209,7 @@ extension ARCameraScreen {
 
 
 extension ARCameraScreen: ARWallArtworkControlDelegate {
-    func arWallArtworkControl(_ control: ARWallArtworkControl, showCoaching: Bool) {
+    public func arWallArtworkControl(_ control: ARWallArtworkControl, showCoaching: Bool) {
         //show / hide all controls while show coaching
         let list = [placeNewButton, placementIcon, raribleIconButton, reorderIconButton, addNodeButtonContainer, removeNodeButtonContainer, takeScreenshotContainer, infoContainer, zoomButton, saveButton]
         list.forEach { tmp in
@@ -217,7 +217,7 @@ extension ARCameraScreen: ARWallArtworkControlDelegate {
             tmp?.alpha = showCoaching ? 0.0 : 1.0
         }
     }
-    func arWallArtworkControl(_ control: ARWallArtworkControl, didSelectArtwork model: ArtworkModel, placing: Bool, zoom: Float) {
+    public func arWallArtworkControl(_ control: ARWallArtworkControl, didSelectArtwork model: ArtworkModel, placing: Bool, zoom: Float) {
         
         //fill names
         titleLabel.text = model.artworkName
@@ -240,7 +240,7 @@ extension ARCameraScreen: ARWallArtworkControlDelegate {
         zoomButton.setTitle("\(ttl)%", for: .normal)
     }
     
-    func arWallArtworkControlDidUnselectArtwork(_ control: ARWallArtworkControl) {
+    public func arWallArtworkControlDidUnselectArtwork(_ control: ARWallArtworkControl) {
         //title
         infoContainer.isHidden = true
         
@@ -260,7 +260,7 @@ extension ARCameraScreen: ARWallArtworkControlDelegate {
 }
 
 extension ARCameraScreen: ARWallArtworkControlOverlayProvider {
-    func arWallArtworkControl(_ control: ARWallArtworkControl, updateOverlayFor model: ArtworkModel, info: [ArtworkSubNodeType : CGPoint]) {
+    public func arWallArtworkControl(_ control: ARWallArtworkControl, updateOverlayFor model: ArtworkModel, info: [ArtworkSubNodeType : CGPoint]) {
         //reusable
         let setTr: (UIView, CGPoint)->() = { tmp, pt in
             tmp.transform = CGAffineTransform.identity

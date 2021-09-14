@@ -138,6 +138,10 @@ private extension ARCameraScreen {
 
 extension ARCameraScreen {
     @IBAction func pressedBack() {
+        if let vc = navigationController, vc.viewControllers.first != self {
+            vc.popViewController(animated: true)
+            return
+        }
         dismiss(animated: true, completion: nil)
     }
     @IBAction func unwindFromSnapshot(segue: UIStoryboardSegue) {

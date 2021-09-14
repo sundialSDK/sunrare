@@ -43,6 +43,8 @@ public class ARCameraScreen: UIViewController {
         return tmp
     }()
     
+    var goBackAction: (()->())? = nil
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -138,11 +140,16 @@ private extension ARCameraScreen {
 
 extension ARCameraScreen {
     @IBAction func pressedBack() {
-        if let vc = navigationController, vc.viewControllers.first != self {
-            vc.popViewController(animated: true)
-            return
+        if let action = goBackAction {
+            action()
         }
-        dismiss(animated: true, completion: nil)
+        else {
+            if let vc = navigationController, vc.viewControllers.first != self {
+                vc.popViewController(animated: true)
+                return
+            }
+            dismiss(animated: true, completion: nil)
+        }
     }
     @IBAction func unwindFromSnapshot(segue: UIStoryboardSegue) {
         //skip

@@ -262,7 +262,7 @@ public extension ARWallArtworkControl {
      @param showIn If set camera screen show immediately in navigation or presented modally if simply view controller used
      @result default ARCameraScreen instance
      */
-    @discardableResult static func defaultARCameraScreen(configuration: DefaultARCameraConfiguration, datasource: ARWallArtworkCameraDataSource?, showIn vc: UIViewController? = nil) throws -> ARCameraScreen {
+    @discardableResult static func defaultARCameraScreen(configuration: DefaultARCameraConfiguration, datasource: ARWallArtworkCameraDataSource?, showIn vc: UIViewController? = nil, customDismiss: (()->())? = nil) throws -> ARCameraScreen {
         
         //a12 chip required
         if !self.isDeviceSupported() {
@@ -275,6 +275,9 @@ public extension ARWallArtworkControl {
             throw GeneralError.defaultCameraFailed
         }
                 
+        //custom dismsis
+        camVc.goBackAction = customDismiss
+        
         //config
         camVc.config(configuration: configuration, datasource: datasource)
         

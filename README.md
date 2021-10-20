@@ -84,7 +84,7 @@ ARWallArtworkControl.requestCameraAccess { granted in
 }
 ```
 
-That's it, this is how it easy. 
+That's it, this is how easy it is. 
 
 ## Cache Content
 
